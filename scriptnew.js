@@ -20,6 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let askedQuestions = new Set();
 
     startButton.addEventListener("click", startGame);
+    nextButton.addEventListener("click", () => {
+        clearInterval(timer); // Stop the timer
+        nextQuestion(); // Move to the next question
+    });
 
     function startGame() {
         const userName = document.getElementById("userName").value;
@@ -156,6 +160,12 @@ document.addEventListener("DOMContentLoaded", () => {
     function nextQuestion() {
         clearInterval(timer);
 
+        if (answerInput.value) {
+            recordAnswer(true, answerInput.value.trim());
+        } else {
+            recordAnswer(false);
+        }
+
         if (currentQuestionIndex < questions.length - 1) {
             currentQuestionIndex++;
             showQuestion(questions[currentQuestionIndex], parseInt(document.getElementById("timePerQuestion").value, 10));
@@ -168,7 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (currentQuestionIndex >= history.length) {
             const currentQuestion = questions[currentQuestionIndex];
             const userAnswer = isAnswered ? userInput : "Unanswered";
-            const correct = parseFloat(userAnswer) === parseFloat(currentQuestion.answer);
+            const correct = userAnswer === currentQuestion.answer.toString();
 
             if (correct) correctAnswers++;
 
@@ -184,7 +194,10 @@ document.addEventListener("DOMContentLoaded", () => {
         gameAreaDiv.style.display = "none";
         resultsDiv.style.display = "block";
 
-        scoreElement.textContent = `Score: ${correctAnswers}/${questions.length} (${((correctAnswers / questions.length) * 100).toFixed(2)}%)`;
+        const percentage = ((correctAnswers / questions.length) * 100).toFixed(2);
+        const passOrFail = percentage > 80 ? "Passed" : "Failed";
+
+        scoreElement.textContent = `Score: ${correctAnswers}/${questions.length} (${percentage}%) - ${passOrFail}`;
 
         reviewTableBody.innerHTML = "";
 
