@@ -177,11 +177,16 @@ document.addEventListener("DOMContentLoaded", () => {
     function recordAnswer(isAnswered, userInput = "") {
         if (currentQuestionIndex >= history.length) {
             const currentQuestion = questions[currentQuestionIndex];
+            
+            // Normalize answers: remove spaces after commas and trim
+            const normalizedCorrectAnswer = currentQuestion.answer.toString().replace(/\s+/g, "");
+            const normalizedUserAnswer = userInput.toString().replace(/\s+/g, "");
+            
             const userAnswer = isAnswered ? userInput : "Unanswered";
-            const correct = userAnswer === currentQuestion.answer.toString();
-
+            const correct = normalizedUserAnswer === normalizedCorrectAnswer;
+    
             if (correct) correctAnswers++;
-
+    
             history.push({
                 question: currentQuestion.question,
                 correctAnswer: currentQuestion.answer,
@@ -189,6 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
     }
+    
 
     function endGame() {
         gameAreaDiv.style.display = "none";
