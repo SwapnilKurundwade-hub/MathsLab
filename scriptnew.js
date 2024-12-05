@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 case "squares":
                     const squareNum = randomNumber(Math.sqrt(maxRange));
-                    question = `Square of ${squareNum}`;
+                    question = `${squareNum} चा वर्ग`;
                     answer = squareNum ** 2;
                     break;
 
@@ -104,20 +104,20 @@ document.addEventListener("DOMContentLoaded", () => {
                     const missingIndex = randomNumber(5);
                     answer = series[missingIndex];
                     series[missingIndex] = "...";
-                    question = `Complete the series: ${series.join(", ")}`;
+                    question = `श्रेणी पूर्ण करा: ${series.join(", ")}`;
                     break;
 
                 case "ascending":
                     const ascNums = Array.from({ length: 5 }, () => randomNumber(maxRange));
                     ascNums.sort(() => Math.random() - 0.5);
-                    question = `Sort in ascending order: ${ascNums.join(", ")}`;
+                    question = `चढत्या क्रमात लिहा: ${ascNums.join(", ")}`;
                     answer = ascNums.sort((a, b) => a - b).join(", ");
                     break;
 
                 case "descending":
                     const descNums = Array.from({ length: 5 }, () => randomNumber(maxRange));
                     descNums.sort(() => Math.random() - 0.5);
-                    question = `Sort in descending order: ${descNums.join(", ")}`;
+                    question = `उतरत्या क्रमात लिहा: ${descNums.join(", ")}`;
                     answer = descNums.sort((a, b) => b - a).join(", ");
                     break;
             }
