@@ -129,33 +129,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function showQuestion(questionObj, time) {
-        if (askedQuestions.has(questionObj.question)) {
-            nextQuestion();
-            return;
-        }
+    // Update question tracker (e.g., "Question: 1/10")
+    const questionTracker = document.getElementById("questionTracker");
+    questionTracker.textContent = `Question: ${currentQuestionIndex + 1}/${questions.length}`;
 
-        askedQuestions.add(questionObj.question);
+    // Display the current question
+    questionElement.textContent = questionObj.question;
+    answerInput.value = ""; // Clear input field for the new question
+    answerInput.focus();
 
-        questionElement.textContent = questionObj.question;
-        answerInput.value = "";
-        answerInput.focus();
+    let timeLeft = time;
+    timerElement.textContent = `Time: ${timeLeft}s`;
 
-        let timeLeft = time;
+    // Ensure the timer is cleared before setting a new interval
+    if (timer) clearInterval(timer);
+
+    timer = setInterval(() => {
+        timeLeft--;
         timerElement.textContent = `Time: ${timeLeft}s`;
 
-        if (timer) clearInterval(timer);
+        if (timeLeft <= 0) {
+            clearInterval(timer);
 
-        timer = setInterval(() => {
-            timeLeft--;
-            timerElement.textContent = `Time: ${timeLeft}s`;
-
-            if (timeLeft <= 0) {
-                clearInterval(timer);
-                recordAnswer(answerInput.value.trim() !== "", answerInput.value.trim());
-                nextQuestion();
-            }
-        }, 1000);
-    }
+            // Automatically save the typed answer or mark as unanswered if none
+            const typedAnswer = answerInput.value.trim(); // Get the user's typed input
+            recordAnswer(typedAnswer !== "", typedAnswer);
+            nextQuestion();
+        }
+    }, 1000);
+}
 
     function nextQuestion() {
         clearInterval(timer);
