@@ -197,26 +197,33 @@ document.addEventListener("DOMContentLoaded", () => {
     
 
     function endGame() {
-        gameAreaDiv.style.display = "none";
-        resultsDiv.style.display = "block";
+    gameAreaDiv.style.display = "none";
+    resultsDiv.style.display = "block";
 
-        const percentage = ((correctAnswers / questions.length) * 100).toFixed(2);
-        const passOrFail = percentage > 80 ? "Passed" : "Failed";
+    // Calculate score and percentage
+    const totalQuestions = questions.length;
+    const percentage = (correctAnswers / totalQuestions) * 100;
 
-        scoreElement.textContent = `Score: ${correctAnswers}/${questions.length} (${percentage}%) - ${passOrFail}`;
+    // Display "Passed" or "Failed" based on percentage
+    const status = percentage > 60 ? "Passed" : "Failed";
 
-        reviewTableBody.innerHTML = "";
+    scoreElement.textContent = `Score: ${correctAnswers}/${totalQuestions} (${percentage.toFixed(2)}%) - ${status}`;
 
-        history.forEach(({ question, correctAnswer, userAnswer }) => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${question}</td>
-                <td>${correctAnswer}</td>
-                <td>${userAnswer}</td>
-            `;
-            reviewTableBody.appendChild(row);
-        });
-    }
+    // Clear previous results to avoid duplication
+    reviewTableBody.innerHTML = "";
+
+    // Populate the results table
+    history.forEach(({ question, correctAnswer, userAnswer }) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${question}</td>
+            <td>${correctAnswer}</td>
+            <td>${userAnswer}</td>
+        `;
+        reviewTableBody.appendChild(row);
+    });
+}
+
 
     function randomNumber(max) {
         return Math.floor(Math.random() * max) + 1;
